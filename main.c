@@ -1,15 +1,32 @@
-
-
 #include <stdio.h>
+#include <stdlib.h>
+#include "agenda.h"
+
+void ChamaMenuPrincipal();
 
 int main()
 {
+    ChamaMenuPrincipal();
+    return 0;
+}
+
+void ChamaMenuPrincipal()
+{
     int acao = 0;
+
+    // Limpa a tela
+    system("cls");
+
+    // Gera menu
     printf("\n---------------------------------\nAcademico: %s\n---------------------------------\n", "Aluno");
     printf("1 - Cadastrar Disciplina\n2 - Grade\n3 - Historico Escolar\n4 - Agenda\n5 - Atividades Pendentes\n---------------------------------\n");
     printf("Informe a acao desejada: ");
     scanf("%d", &acao);
 
+    // Limpa a tela
+    system("cls");
+
+    // Executa acao
     switch (acao)
     {
     case 1:
@@ -22,12 +39,11 @@ int main()
         printf("Historico Escolar\n");
         break;
     case 4:
-        printf("Agenda\n");
+        AcessaAgenda();
+        ChamaMenuPrincipal();
         break;
     case 5:
         printf("Atividades Pendentes\n");
         break;
     }
-
-    return 0;
 }
