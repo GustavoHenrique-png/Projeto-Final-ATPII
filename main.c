@@ -35,7 +35,7 @@ void ChamaMenuPrincipal()
             printf("Cadastrar Disciplina\n");
             break;
         case 2:
-            printf("Grade\n");
+            leArquivos();
             break;
         case 3:
             printf("Historico Escolar\n");
