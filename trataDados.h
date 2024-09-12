@@ -1,41 +1,94 @@
 #ifndef TRATADADADOS_H
-#define TRATADADOS_H
+#define TRATADADADOS_H
 
 #include <stdio.h>
+#include <stdlib.h>
 
-#define TAMANHO_MAXIMO 100
+#define MAX_PREREQUISITOS 10
+#define MAX_DISCIPLINAS 21
 
+void menuGrade();
+void leArquivos();
 
+// Definição do enum para o tipo de disciplina
+typedef enum {
+    Obrigatoria,
+    Optativa
+} TipoDisciplina;
 
-void leArquivos(){
+// Definição da struct para uma disciplina
+typedef struct {
+    char codigo[10];// Código alfanumérico da disciplina
+    char titulo[100];// Título da disciplina
+    int cargaHoraria;// Carga horária da disciplina
+    int semestre;// Semestre em que a disciplina é oferecida
+    char prerequisitos[MAX_PREREQUISITOS][10];  // Lista de códigos das disciplinas pré-requisito
+    int numPrerequisitos;// Quantidade de pré-requisitos
+    TipoDisciplina tipo;// Tipo da disciplina (Optativa ou Obrigatória)
+} Disciplina;
 
-    FILE *file;
-    file = fopen("disciplinas.bin","rb");
-    int tamanho,linhas,colunas;
+// Definição da struct para a matriz curricular
+typedef struct {
+    Disciplina disciplinas[MAX_DISCIPLINAS];
+    int numSemestres;                  // Número de semestres
+} MatrizCurricular;
 
-    //Tratando erros
-    if(file == NULL){
-        printf("Não foi possível abrir o arquivo\n");
-        return;
-    }else{
+void acessaGrade(){
+    menuGrade();
+}
 
-        fread(&linhas,sizeof(int),1,file);
-        fread(&colunas,sizeof(int),1,file);
-        int dados[TAMANHO_MAXIMO] [TAMANHO_MAXIMO];
+void menuGrade(){
+    int acao;
+    do {
+        system("cls");
+        printf("\n---------------------------------\nGrade\n---------------------------------\n");
+        printf("1 - Lista Disciplina\n2 - Cadastra Disciplina\n3 - Excluir Disciplina\n4 - Voltar\n0 - Fechar\n---------------------------------\n");
+        printf("Informe a acao desejada: ");
+        scanf("%d", &acao);
 
-        //Lendo os dados do arquivo
-        fread(dados,sizeof(int),linhas*colunas,file);
-
-        //Fechando o arquivo
-        fclose(file);
-
-        //Exibindo os dados
-        for (int i = 0; i < linhas; i++)
-        {
-            for(int j = 0; j<colunas; j++){
-                printf("%d",dados[i][j]);
-            }
+        switch (acao) {
+        case 1:
+            leArquivos();
+            break;
+        case 2:
+            printf("Cadastra Disciplina\n");
+            break;
+        case 3:
+            printf("Exclui Disciplina\n");
+            break;
+        case 4:
+            break;
+        default:
+            break;
         }
+    } while (acao != 0);
+}
+
+void leArquivos() {
+    FILE *file = fopen("disciplinas.bin", "rb");
+    if (file == NULL) {
+        printf("Erro ao abrir o arquivo.\n");
+        return;
+    }
+
+    Disciplina disciplina[MAX_DISCIPLINAS];
+
+    // Lê todas as disciplinas do arquivo
+    size_t disciplinasLidas = fread(disciplina, sizeof(Disciplina), MAX_DISCIPLINAS, file);
+
+    fclose(file);  // Fecha o arquivo após a leitura
+
+    // Exibe as disciplinas lidas
+    for (size_t i = 0; i < disciplinasLidas; i++) {
+        printf("Título: %s\n", disciplina[i].titulo);
+        printf("Semestre: %d\n", disciplina[i].semestre);
+        printf("Carga Horária: %d\n", disciplina[i].cargaHoraria);
+        printf("Tipo: %s\n", (disciplina[i].tipo == Obrigatoria) ? "Obrigatória" : "Optativa");
+        printf("---------------------------------\n");
+    }
+
+    if (disciplinasLidas == 0) {
+        printf("Nenhuma disciplina foi encontrada no arquivo.\n");
     }
 }
 
