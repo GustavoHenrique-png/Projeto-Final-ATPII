@@ -2,15 +2,25 @@
 #define agenda_h
 #include <stdio.h>
 #include <unistd.h>
+#include "data.h"
 
 void AdicionaCompromisso();
+void InsereCompromissoNoArquivo();
 void ListaCompromissos();
+void ImprimeInformacoes();
 void MenuAgenda();
+
+typedef enum Status
+{
+    Pendente = 0,
+    Concluido = 1
+} Status;
 
 typedef struct Compromisso
 {
     char descricao[100];
-    char data[10];
+    Data data;
+    Status status;
 } Compromisso;
 
 void AcessaAgenda()
@@ -50,14 +60,38 @@ void MenuAgenda()
 void AdicionaCompromisso()
 {
     Compromisso compromisso;
+    char data[11];
 
     system("cls");
     printf("\n---------------------------------\nAdicionando Compromisso\n---------------------------------\n");
     printf("Informe a descricao do compromisso: ");
     scanf(" %[^\n]", compromisso.descricao);
-    printf("Informe a data do compromisso: ");
-    scanf(" %[^\n]", compromisso.data);
+    printf("Informe a data do compromisso (formato dd-mm-AAAA): ");
+    scanf(" %[^\n]", data);
+    printf("Informe o status do compromisso (0 - Pendente, 1 - Concluido): ");
+    scanf("%d", &compromisso.status);
 
+    compromisso.data = ConverteStringToData(data);
+
+    while (compromisso.data.dia == 0 && compromisso.data.mes == 0 && compromisso.data.ano == 0)
+    {
+        printf("Data informada invalida, por favor informe uma data valida (formato dd-mm-AAAA): ");
+        scanf(" %[^\n]", data);
+        compromisso.data = ConverteStringToData(data);
+    }
+
+    InsereCompromissoNoArquivo(compromisso);
+
+    printf("\n---------------------------------\n");
+    printf("\nCompromisso adicionado com sucesso a sua agenda!\n");
+    printf("\n---------------------------------\n");
+    printf("\nVoltando para o menu da agenda\n");
+
+    sleep(2);
+}
+
+void InsereCompromissoNoArquivo(Compromisso compromisso)
+{
     FILE *file = fopen("agenda.bin", "ab");
     if (file == NULL)
     {
@@ -69,20 +103,6 @@ void AdicionaCompromisso()
         fwrite(&compromisso, sizeof(Compromisso), 1, file);
         fclose(file);
     }
-
-    printf("\n---------------------------------\n");
-    printf("\nCompromisso adicionado com sucesso a sua agenda!\n");
-    printf("\n---------------------------------\n");
-    printf("\nVoltando para o menu da agenda\n");
-
-    printf("o-\r");
-    sleep(1);
-    printf("-o\r");
-    sleep(1);
-    printf("o-\r");
-    sleep(1);
-    printf("-o\r");
-    sleep(1);
 }
 
 void ListaCompromissos()
@@ -103,7 +123,7 @@ void ListaCompromissos()
             Compromisso obj;
             for (int i = 1; fread(&obj, sizeof(Compromisso), 1, file); i++)
             {
-                printf("%d - Descricao: %s\n", i, obj.descricao);
+                ImprimeInformacoes(i, obj);
             }
 
             fclose(file);
@@ -114,4 +134,10 @@ void ListaCompromissos()
         scanf("%d", &acao);
     } while (acao != 0);
 }
+
+void ImprimeInformacoes(int i, Compromisso obj)
+{
+    printf("%d - %d/%d/%d - %s - %s\n", i, obj.data.dia, obj.data.mes, obj.data.ano, obj.descricao, obj.status == Pendente ? "Pendente" : "Concluido");
+}
+
 #endif
