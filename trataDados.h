@@ -3,18 +3,29 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <locale.h>
+#include <windows.h>
 
 #define MAX_PREREQUISITOS 10
 #define MAX_DISCIPLINAS 21
 
 void menuGrade();
 void leArquivos();
+void cadastraDisciplina();
+void excluiDisciplina();
 
 // Definição do enum para o tipo de disciplina
 typedef enum {
     Obrigatoria,
     Optativa
 } TipoDisciplina;
+
+//Definição de status da disciplina
+typedef enum{
+    Cursando,
+    Cursada,
+    NaoCursada
+} statusDisciplina;
 
 // Definição da struct para uma disciplina
 typedef struct {
@@ -25,12 +36,13 @@ typedef struct {
     char prerequisitos[MAX_PREREQUISITOS][10];  // Lista de códigos das disciplinas pré-requisito
     int numPrerequisitos;// Quantidade de pré-requisitos
     TipoDisciplina tipo;// Tipo da disciplina (Optativa ou Obrigatória)
+    statusDisciplina status;//mantém os status de uma disciplina
 } Disciplina;
 
 // Definição da struct para a matriz curricular
 typedef struct {
     Disciplina disciplinas[MAX_DISCIPLINAS];
-    int numSemestres;                  // Número de semestres
+    int numSemestres;// Número de semestres
 } MatrizCurricular;
 
 void acessaGrade(){
@@ -51,10 +63,10 @@ void menuGrade(){
             leArquivos();
             break;
         case 2:
-            printf("Cadastra Disciplina\n");
+            cadastraDisciplina();
             break;
         case 3:
-            printf("Exclui Disciplina\n");
+            excluiDisciplina();
             break;
         case 4:
             break;
@@ -85,11 +97,31 @@ void leArquivos() {
         printf("Carga Horária: %d\n", disciplina[i].cargaHoraria);
         printf("Tipo: %s\n", (disciplina[i].tipo == Obrigatoria) ? "Obrigatória" : "Optativa");
         printf("---------------------------------\n");
+        sleep(10);
     }
 
     if (disciplinasLidas == 0) {
         printf("Nenhuma disciplina foi encontrada no arquivo.\n");
     }
+
+}
+
+void cadastraDisciplina(){
+
+    char palavra[20];
+
+    FILE * fileAluno = fopen("fileAluno.bin","wb");
+
+    printf("Testa ai:\n");
+    scanf("%s",palavra);
+
+    fprintf(fileAluno,"%s",palavra);
+    fclose(fileAluno);
+
+}
+
+void excluiDisciplina(){
+
 }
 
 #endif
