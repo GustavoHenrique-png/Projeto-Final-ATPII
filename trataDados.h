@@ -39,6 +39,15 @@ typedef struct {
     statusDisciplina status;//mantém os status de uma disciplina
 } Disciplina;
 
+typedef struct{
+    char codigo[10];
+    char titulo [100];
+    int semestre;
+    char preRequisitos[MAX_PREREQUISITOS][10];
+    int numPrerequisitos;
+    statusDisciplina status;
+}minhasDisciplinas;
+
 // Definição da struct para a matriz curricular
 typedef struct {
     Disciplina disciplinas[MAX_DISCIPLINAS];
@@ -107,16 +116,28 @@ void leArquivos() {
 }
 
 void cadastraDisciplina(){
-
-    char palavra[20];
-
     FILE * fileAluno = fopen("fileAluno.bin","wb");
+    minhasDisciplinas minhasdisciplinas[MAX_DISCIPLINAS];
+    int escolha;
+    size_t minhasdisciplinasLidas = fwrite(minhasdisciplinas,sizeof(minhasDisciplinas),MAX_DISCIPLINAS,fileAluno);
 
-    printf("Testa ai:\n");
-    scanf("%s",palavra);
-
-    fprintf(fileAluno,"%s",palavra);
-    fclose(fileAluno);
+    for(size_t i = 0; i<minhasdisciplinasLidas;i++){
+        printf("Código da disciplina:\n");
+        scanf("^\n[]",minhasdisciplinas[i].codigo);
+        printf("Titulo da disciplina:\n");
+        scanf("^\n[]",minhasdisciplinas[i].titulo);
+        printf("Necessita pre-requisitos?\n 1 - Sim\n2 - Não");
+        scanf("%d",&escolha);
+        if(escolha == 1){
+            printf("Digite o numero de pre requisitos necessários");
+            scanf("^\n[]",minhasdisciplinas[i].numPrerequisitos);
+            size_t minhasdisciplinasLidas = fwrite(minhasdisciplinas,sizeof(minhasDisciplinas),MAX_DISCIPLINAS,fileAluno);
+        }
+        else{
+            size_t minhasdisciplinasLidas = fwrite(minhasdisciplinas,sizeof(minhasDisciplinas),MAX_DISCIPLINAS,fileAluno);
+        }
+        printf("Disciplina cadastrada com sucesso!");
+    }
 
 }
 
