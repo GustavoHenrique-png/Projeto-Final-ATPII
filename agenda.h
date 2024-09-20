@@ -124,14 +124,6 @@ void ListaCompromissos()
         else
         {
             Compromisso obj;
-            if (fread(&obj, sizeof(Compromisso), 1, file) == 0) // Verifica se o arquivo está vazio
-            {
-                fclose(file);
-                printf("Nenhum compromisso cadastrado.\nVoltando para o menu da agenda.\n");
-                sleep(2);
-                return;
-            }
-
             for (int i = 1; fread(&obj, sizeof(Compromisso), 1, file); i++) // Lê o arquivo e imprime os compromissos
             {
                 ImprimeInformacoes(i, obj);
