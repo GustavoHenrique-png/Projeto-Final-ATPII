@@ -202,7 +202,10 @@ void ExcluirCompromisso()
         }
     }
 
-    printf("Compromisso excluido com sucesso! Voltando para a listagem.\n");
+    printf("\n---------------------------------\n");
+    printf("Compromisso excluido com sucesso!\n");
+    printf("\n---------------------------------\n");
+    printf("\nVoltando para o menu da agenda\n");
     sleep(2);
     ListaCompromissos();
 }
@@ -210,37 +213,37 @@ void ExcluirCompromisso()
 // Função para listar os compromissos pendentes
 void ListaCompromissosPendentes()
 {
-    system("cls");
-    printf("\n---------------------------------\nCompromissos Pendentes\n---------------------------------\n");
-
-    FILE *file = fopen("agenda.bin", "rb"); // Abre arquivo para leitura
-    if (file == NULL)
+    int acao;
+    do
     {
-        perror("Erro ao abrir arquivo.");
-        return;
-    }
-    else
-    {
-        Compromisso obj;
+        system("cls");
+        printf("\n---------------------------------\nCompromissos Pendentes\n---------------------------------\n");
 
-        size_t primeiroRegistro = fread(&obj, sizeof(Compromisso), 1, file);
-        if (primeiroRegistro == 0)
+        FILE *file = fopen("agenda.bin", "rb"); // Abre arquivo para leitura
+        if (file == NULL)
         {
-            printf("Nenhum compromisso encontrado. Voltando para o menu principal.\n");
-            sleep(2);
+            perror("Erro ao abrir arquivo.");
             return;
         }
-
-        for (int i = 1; fread(&obj, sizeof(Compromisso), 1, file); i++) // Lê o arquivo e imprime os compromissos
+        else
         {
-            if (obj.status == Pendente)
+            Compromisso obj;
+
+            for (int i = 1; fread(&obj, sizeof(Compromisso), 1, file); i++) // Lê o arquivo e imprime os compromissos
             {
-                ImprimeInformacoes(i, obj);
+                if (obj.status == Pendente)
+                {
+                    ImprimeInformacoes(i, obj);
+                }
             }
+
+            fclose(file);
         }
 
-        fclose(file);
-    }
+        printf("\n---------------------------------\n");
+        printf("1 - Excluir Compromisso\n2 - Proxima Pagina\n3 - Pagina Anterior\n0 - Voltar ao Menu\n");
+        scanf("%d", &acao);
+    } while (acao != 0);
 }
 
 // Função para imprimir as informações de um compromisso na listagem
