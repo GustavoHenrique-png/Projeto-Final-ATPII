@@ -15,10 +15,11 @@ void ChamaMenuPrincipal()
 {
     int acao;
 
-    // Limpa a tela
-    system("cls");
+    do
+    {
+        // Limpa a tela
+        system("cls");
 
-    do{
         // Gera menu
         printf("\n---------------------------------\nAcademico: %s\n---------------------------------\n", "Aluno");
         printf("1 - Cadastrar Disciplina\n2 - Grade\n3 - Historico Escolar\n4 - Agenda\n5 - Atividades Pendentes\n---------------------------------\n");
@@ -42,14 +43,11 @@ void ChamaMenuPrincipal()
             break;
         case 4:
             AcessaAgenda();
-            ChamaMenuPrincipal();
             break;
         case 5:
-            printf("Atividades Pendentes\n");
+            ListaCompromissosPendentes();
             break;
         }
 
-    }while(acao !=0);
-
-    
+    } while (acao != 0);
 }

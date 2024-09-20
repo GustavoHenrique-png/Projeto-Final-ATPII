@@ -7,6 +7,7 @@
 void AdicionaCompromisso();
 void InsereCompromissoNoArquivo();
 void ListaCompromissos();
+void ListaCompromissosPendentes();
 void ImprimeInformacoes();
 void ExcluirCompromisso();
 void MenuAgenda();
@@ -174,6 +175,15 @@ void ExcluirCompromisso()
         else
         {
             Compromisso obj;
+
+            size_t primeiroRegistro = fread(&obj, sizeof(Compromisso), 1, file);
+            if (primeiroRegistro == 0)
+            {
+                printf("Nenhum compromisso encontrado. Voltando para o menu da agenda.\n");
+                sleep(2);
+                return;
+            }
+
             for (int i = 1; fread(&obj, sizeof(Compromisso), 1, file); i++) // Le arquivo e escreve no arquivo temporario
             {
                 if (i != posicao) // Verifica se a posicao atual é a posicao informada
@@ -195,6 +205,42 @@ void ExcluirCompromisso()
     printf("Compromisso excluido com sucesso! Voltando para a listagem.\n");
     sleep(2);
     ListaCompromissos();
+}
+
+// Função para listar os compromissos pendentes
+void ListaCompromissosPendentes()
+{
+    system("cls");
+    printf("\n---------------------------------\nCompromissos Pendentes\n---------------------------------\n");
+
+    FILE *file = fopen("agenda.bin", "rb"); // Abre arquivo para leitura
+    if (file == NULL)
+    {
+        perror("Erro ao abrir arquivo.");
+        return;
+    }
+    else
+    {
+        Compromisso obj;
+
+        size_t primeiroRegistro = fread(&obj, sizeof(Compromisso), 1, file);
+        if (primeiroRegistro == 0)
+        {
+            printf("Nenhum compromisso encontrado. Voltando para o menu principal.\n");
+            sleep(2);
+            return;
+        }
+
+        for (int i = 1; fread(&obj, sizeof(Compromisso), 1, file); i++) // Lê o arquivo e imprime os compromissos
+        {
+            if (obj.status == Pendente)
+            {
+                ImprimeInformacoes(i, obj);
+            }
+        }
+
+        fclose(file);
+    }
 }
 
 // Função para imprimir as informações de um compromisso na listagem
