@@ -13,6 +13,7 @@ void menuGrade();
 void leArquivos();
 void cadastraDisciplina();
 void excluiDisciplina();
+void listaDisciplinaCAdastrada();
 
 // Definição do enum para o tipo de disciplina
 typedef enum {
@@ -78,6 +79,7 @@ void menuGrade(){
             excluiDisciplina();
             break;
         case 4:
+            listaDisciplinaCadastrada();
             break;
         default:
             break;
@@ -138,6 +140,10 @@ void cadastraDisciplina(){
         }
         printf("Disciplina cadastrada com sucesso!");
     }
+
+}
+
+void listaDisciplinaCadastrada(){
 
 }
 
