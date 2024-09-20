@@ -175,11 +175,11 @@ void cadastraDisciplina() {
 }
 
 void listaDisciplinaCadastrada() {
-    // Implementação futura
+    
 }
 
 void excluiDisciplina() {
-    // Implementação futura
+    
 }
 
 #endif
