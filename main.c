@@ -22,7 +22,7 @@ void ChamaMenuPrincipal()
 
         // Gera menu
         printf("\n---------------------------------\nAcademico: %s\n---------------------------------\n", "Aluno");
-        printf("1 - Cadastrar Disciplina\n2 - Grade\n3 - Historico Escolar\n4 - Agenda\n5 - Atividades Pendentes\n---------------------------------\n");
+        printf("1 - Cadastrar Disciplina\n2 - Grade\n3 - Historico Escolar\n4 - Agenda\n5 - Atividades Pendentes\n0 - Sair\n---------------------------------\n");
         printf("Informe a acao desejada: ");
         scanf("%d", &acao);
 
@@ -46,6 +46,8 @@ void ChamaMenuPrincipal()
             break;
         case 5:
             ListaCompromissosPendentes();
+            break;
+        default:
             break;
         }
 
