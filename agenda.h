@@ -4,6 +4,9 @@
 #include <unistd.h>
 #include "data.h"
 
+#define MAX_PAGINA 5
+#define SLEEP_TIME 2
+
 void AdicionaCompromisso();
 void InsereCompromissoNoArquivo();
 void ListaCompromissos();
@@ -88,7 +91,7 @@ void AdicionaCompromisso()
     printf("\n---------------------------------\n");
     printf("\nVoltando para o menu da agenda\n");
 
-    sleep(2); // Aguarda 2 segundos e volta para o menu da agenda
+    sleep(SLEEP_TIME);
 }
 
 // Função para inserir um compromisso no arquivo
@@ -107,49 +110,175 @@ void InsereCompromissoNoArquivo(Compromisso compromisso)
     }
 }
 
-// Função para listar os compromissos
+// region ListaCompromissos
+//  Função para listar os compromissos
 void ListaCompromissos()
 {
-    int acao;
-    do
+    system("cls");
+    FILE *file = fopen("agenda.bin", "rb"); // Abre arquivo para leitura
+    if (file == NULL)
     {
-        system("cls");
-        printf("\n---------------------------------\nCompromissos\n---------------------------------\n");
-        FILE *file = fopen("agenda.bin", "rb"); // Abre arquivo para leitura
-        if (file == NULL)
+        perror("Erro ao abrir arquivo.");
+        sleep(SLEEP_TIME);
+        return;
+    }
+    else
+    {
+        Compromisso obj;
+        int pagina = 0;
+        int totalCompromissos = 0;
+
+        // Conta o total de compromissos
+        while (fread(&obj, sizeof(Compromisso), 1, file))
         {
-            perror("Erro ao abrir arquivo.");
-            sleep(2);
+            if (obj.status == Pendente)
+                totalCompromissos++;
+        }
+
+        fseek(file, 0, SEEK_SET); // Reseta o ponteiro do arquivo para o inicio
+
+        if (totalCompromissos == 0) // Verifica se existem compromissos pendentes
+        {
+            printf("Nenhum compromisso encontrado.\n");
+            fclose(file);
             return;
         }
-        else
+
+        int acao;
+        do
         {
-            Compromisso obj;
-            for (int i = 1; fread(&obj, sizeof(Compromisso), 1, file); i++) // Lê o arquivo e imprime os compromissos
+            system("cls");
+            printf("\n---------------------------------\nCompromissos - Pagina %d\n---------------------------------\n", pagina + 1);
+
+            int inicio = pagina * MAX_PAGINA; // Define o inicio da pagina
+            int fim = inicio + MAX_PAGINA;    // Define o fim da pagina
+            int compromissoAtual = 0;         // Contador de compromissos
+
+            while (fread(&obj, sizeof(Compromisso), 1, file)) // Le o arquivo e imprime os compromissos
             {
-                ImprimeInformacoes(i, obj);
+                if (obj.status == Pendente)
+                {
+                    if (compromissoAtual >= inicio && compromissoAtual < fim) // Verifica se o compromisso atual esta na pagina
+                        ImprimeInformacoes(compromissoAtual + 1, obj);
+                    compromissoAtual++;
+                }
             }
 
-            fclose(file);
+            // Reseta o ponteiro do arquivo para o inicio
+            fseek(file, 0, SEEK_SET);
+
+            // Imprime as opcoes do menu
+            printf("\n---------------------------------\n");
+            if (fim < totalCompromissos)
+                printf("1 - Proxima Pagina\n");
+            if (pagina > 0)
+                printf("2 - Pagina Anterior\n");
+            printf("3 - Excluir Compromisso\n");
+            printf("4 - Mudar Status\n");
+            printf("0 - Voltar ao Menu\n");
+            scanf("%d", &acao);
+
+            if (acao == 1 && fim < totalCompromissos)
+                pagina++;
+            else if (acao == 2 && pagina > 0)
+                pagina--;
+
+            if (acao == 3)
+            {
+                fclose(file);
+                ExcluirCompromisso();
+            }
+        } while (acao != 0 && acao != 3);
+
+        fclose(file);
+    }
+}
+
+// Função para listar os compromissos pendentes
+void ListaCompromissosPendentes()
+{
+    system("cls");
+    printf("\n---------------------------------\nCompromissos Pendentes\n---------------------------------\n");
+
+    FILE *file = fopen("agenda.bin", "rb"); // Abre arquivo para leitura
+    if (file == NULL)
+    {
+        perror("Erro ao abrir arquivo.");
+        fclose(file);
+        return;
+    }
+    else
+    {
+        Compromisso obj;
+        int pagina = 0;
+        int totalCompromissos = 0;
+
+        // Conta o total de compromissos pendentes
+        while (fread(&obj, sizeof(Compromisso), 1, file))
+        {
+            if (obj.status == Pendente)
+                totalCompromissos++;
         }
 
-        printf("\n---------------------------------\n");
-        printf("1 - Excluir Compromisso\n2 - Proxima Pagina\n3 - Pagina Anterior\n0 - Voltar ao Menu\n");
-        scanf("%d", &acao);
-        switch (acao)
+        fseek(file, 0, SEEK_SET); // Reseta o ponteiro do arquivo para o inicio
+
+        if (totalCompromissos == 0) // Verifica se existem compromissos pendentes
         {
-        case 1:
-            ExcluirCompromisso();
-            break;
-        case 2:
-            break;
-        case 3:
-            break;
-        default:
-            break;
+            printf("Nenhum compromisso pendente encontrado.\n");
+            fclose(file);
+            return;
         }
-    } while (acao != 0);
+
+        int acao;
+        do
+        {
+            system("cls");
+            printf("\n---------------------------------\nCompromissos Pendentes - Pagina %d\n---------------------------------\n", pagina + 1);
+
+            int inicio = pagina * MAX_PAGINA; // Define o inicio da pagina
+            int fim = inicio + MAX_PAGINA;    // Define o fim da pagina
+            int compromissoAtual = 0;         // Contador de compromissos
+
+            while (fread(&obj, sizeof(Compromisso), 1, file)) // Le o arquivo e imprime os compromissos pendentes
+            {
+                if (obj.status == Pendente)
+                {
+                    if (compromissoAtual >= inicio && compromissoAtual < fim) // Verifica se o compromisso atual esta na pagina
+                        ImprimeInformacoes(compromissoAtual + 1, obj);
+                    compromissoAtual++;
+                }
+            }
+
+            // Reseta o ponteiro do arquivo para o inicio
+            fseek(file, 0, SEEK_SET);
+
+            // Imprime as opcoes do menu
+            printf("\n---------------------------------\n");
+            if (fim < totalCompromissos)
+                printf("1 - Proxima Pagina\n");
+            if (pagina > 0)
+                printf("2 - Pagina Anterior\n");
+            printf("3 - Excluir Compromisso\n");
+            printf("0 - Voltar ao Menu\n");
+            scanf("%d", &acao);
+
+            if (acao == 1 && fim < totalCompromissos)
+                pagina++;
+            else if (acao == 2 && pagina > 0)
+                pagina--;
+
+            if (acao == 3)
+            {
+                fclose(file);
+                ExcluirCompromisso();
+            }
+        } while (acao != 0 && acao != 3);
+
+        if (file != NULL)
+            fclose(file);
+    }
 }
+// endregion ListaCompromissos
 
 // Função para excluir um compromisso
 void ExcluirCompromisso()
@@ -175,12 +304,21 @@ void ExcluirCompromisso()
         else
         {
             Compromisso obj;
+            int totalCompromissos = 0;
 
-            size_t primeiroRegistro = fread(&obj, sizeof(Compromisso), 1, file);
-            if (primeiroRegistro == 0)
+            while (fread(&obj, sizeof(Compromisso), 1, file))
+            {
+                if (obj.status == Pendente)
+                    totalCompromissos++;
+            }
+
+            // Reseta o ponteiro do arquivo para o inicio
+            fseek(file, 0, SEEK_SET);
+
+            if (totalCompromissos == 0)
             {
                 printf("Nenhum compromisso encontrado. Voltando para o menu da agenda.\n");
-                sleep(2);
+                sleep(SLEEP_TIME);
                 return;
             }
 
@@ -205,51 +343,14 @@ void ExcluirCompromisso()
     printf("\n---------------------------------\n");
     printf("Compromisso excluido com sucesso!\n");
     printf("\n---------------------------------\n");
-    printf("\nVoltando para o menu da agenda\n");
-    sleep(2);
-    ListaCompromissos();
-}
-
-// Função para listar os compromissos pendentes
-void ListaCompromissosPendentes()
-{
-    int acao;
-    do
-    {
-        system("cls");
-        printf("\n---------------------------------\nCompromissos Pendentes\n---------------------------------\n");
-
-        FILE *file = fopen("agenda.bin", "rb"); // Abre arquivo para leitura
-        if (file == NULL)
-        {
-            perror("Erro ao abrir arquivo.");
-            return;
-        }
-        else
-        {
-            Compromisso obj;
-
-            for (int i = 1; fread(&obj, sizeof(Compromisso), 1, file); i++) // Lê o arquivo e imprime os compromissos
-            {
-                if (obj.status == Pendente)
-                {
-                    ImprimeInformacoes(i, obj);
-                }
-            }
-
-            fclose(file);
-        }
-
-        printf("\n---------------------------------\n");
-        printf("1 - Excluir Compromisso\n2 - Proxima Pagina\n3 - Pagina Anterior\n0 - Voltar ao Menu\n");
-        scanf("%d", &acao);
-    } while (acao != 0);
+    printf("\nVoltando para o menu\n");
+    sleep(SLEEP_TIME);
 }
 
 // Função para imprimir as informações de um compromisso na listagem
 void ImprimeInformacoes(int i, Compromisso obj)
 {
-    printf("%d - %d/%d/%d - %s - %s\n", i, obj.data.dia, obj.data.mes, obj.data.ano, obj.descricao, obj.status == Pendente ? "Pendente" : "Concluido");
+    printf("Id: %d \nData: %d/%d/%d \nDescricao: %s \nStatus: %s\n---------------------------------\n", i, obj.data.dia, obj.data.mes, obj.data.ano, obj.descricao, obj.status == Pendente ? "Pendente" : "Concluido");
 }
 
 #endif
