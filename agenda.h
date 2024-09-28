@@ -133,8 +133,7 @@ void ListaCompromissos()
         // Conta o total de compromissos
         while (fread(&obj, sizeof(Compromisso), 1, file))
         {
-            if (obj.status == Pendente)
-                totalCompromissos++;
+            totalCompromissos++;
         }
 
         fseek(file, 0, SEEK_SET); // Reseta o ponteiro do arquivo para o inicio
@@ -145,6 +144,7 @@ void ListaCompromissos()
             printf("Nenhum compromisso encontrado.");
             printf("\n---------------------------------\n");
             printf("\nVoltando para o menu da agenda\n");
+            sleep(SLEEP_TIME);
             fclose(file);
             return;
         }
@@ -202,14 +202,11 @@ void ListaCompromissos()
 // Função para listar os compromissos pendentes
 void ListaCompromissosPendentes()
 {
-    system("cls");
-    printf("\n---------------------------------\nCompromissos Pendentes\n---------------------------------\n");
-
     FILE *file = fopen("agenda.bin", "rb"); // Abre arquivo para leitura
     if (file == NULL)
     {
         perror("Erro ao abrir arquivo.");
-        fclose(file);
+        sleep(SLEEP_TIME);
         return;
     }
     else
@@ -229,7 +226,11 @@ void ListaCompromissosPendentes()
 
         if (totalCompromissos == 0) // Verifica se existem compromissos pendentes
         {
-            printf("Nenhum compromisso pendente encontrado.\n");
+            printf("\n---------------------------------\n");
+            printf("Nenhum compromisso encontrado.");
+            printf("\n---------------------------------\n");
+            printf("\nVoltando para o menu da agenda\n");
+            sleep(SLEEP_TIME);
             fclose(file);
             return;
         }
@@ -271,8 +272,7 @@ void ListaCompromissosPendentes()
                 pagina++;
             else if (acao == 2 && pagina > 0)
                 pagina--;
-
-            if (acao == 3)
+            else if (acao == 3)
             {
                 fclose(file);
                 ExcluiCompromisso();
