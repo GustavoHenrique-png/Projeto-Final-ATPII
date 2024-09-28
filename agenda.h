@@ -12,7 +12,7 @@ void InsereCompromissoNoArquivo();
 void ListaCompromissos();
 void ListaCompromissosPendentes();
 void ImprimeInformacoes();
-void ExcluirCompromisso();
+void ExcluiCompromisso();
 void MenuAgenda();
 
 // Definição do enum para o status do compromisso
@@ -72,17 +72,19 @@ void AdicionaCompromisso()
     scanf(" %[^\n]", compromisso.descricao); // Lê a descrição do compromisso
     printf("Informe a data do compromisso (formato dd-mm-AAAA): ");
     scanf(" %[^\n]", data); // Lê a data do compromisso
-    printf("Informe o status do compromisso (0 - Pendente, 1 - Concluido): ");
-    scanf("%d", &compromisso.status); // Lê o status do compromisso
 
-    compromisso.data = ConverteStringToData(data); // Converte a string para data
-
-    while (compromisso.data.dia == 0 && compromisso.data.mes == 0 && compromisso.data.ano == 0) // Garante que a data informada é válida
+    // Garante que a data informada é válida
+    while (compromisso.data.dia == 0 && compromisso.data.mes == 0 && compromisso.data.ano == 0)
     {
         printf("Data informada invalida, por favor informe uma data valida (formato dd-mm-AAAA): ");
         scanf(" %[^\n]", data);
         compromisso.data = ConverteStringToData(data);
     }
+
+    printf("Informe o status do compromisso (0 - Pendente, 1 - Concluido): ");
+    scanf("%d", &compromisso.status); // Lê o status do compromisso
+
+    compromisso.data = ConverteStringToData(data); // Converte a string para data
 
     InsereCompromissoNoArquivo(compromisso); // Insere o compromisso no arquivo
 
@@ -131,15 +133,18 @@ void ListaCompromissos()
         // Conta o total de compromissos
         while (fread(&obj, sizeof(Compromisso), 1, file))
         {
-            if (obj.status == Pendente)
-                totalCompromissos++;
+            totalCompromissos++;
         }
 
         fseek(file, 0, SEEK_SET); // Reseta o ponteiro do arquivo para o inicio
 
         if (totalCompromissos == 0) // Verifica se existem compromissos pendentes
         {
-            printf("Nenhum compromisso encontrado.\n");
+            printf("\n---------------------------------\n");
+            printf("Nenhum compromisso encontrado.");
+            printf("\n---------------------------------\n");
+            printf("\nVoltando para o menu da agenda\n");
+            sleep(SLEEP_TIME);
             fclose(file);
             return;
         }
@@ -174,7 +179,6 @@ void ListaCompromissos()
             if (pagina > 0)
                 printf("2 - Pagina Anterior\n");
             printf("3 - Excluir Compromisso\n");
-            printf("4 - Mudar Status\n");
             printf("0 - Voltar ao Menu\n");
             scanf("%d", &acao);
 
@@ -186,25 +190,23 @@ void ListaCompromissos()
             if (acao == 3)
             {
                 fclose(file);
-                ExcluirCompromisso();
+                ExcluiCompromisso();
             }
         } while (acao != 0 && acao != 3);
 
-        fclose(file);
+        if (file != NULL)
+            fclose(file);
     }
 }
 
 // Função para listar os compromissos pendentes
 void ListaCompromissosPendentes()
 {
-    system("cls");
-    printf("\n---------------------------------\nCompromissos Pendentes\n---------------------------------\n");
-
     FILE *file = fopen("agenda.bin", "rb"); // Abre arquivo para leitura
     if (file == NULL)
     {
         perror("Erro ao abrir arquivo.");
-        fclose(file);
+        sleep(SLEEP_TIME);
         return;
     }
     else
@@ -224,7 +226,11 @@ void ListaCompromissosPendentes()
 
         if (totalCompromissos == 0) // Verifica se existem compromissos pendentes
         {
-            printf("Nenhum compromisso pendente encontrado.\n");
+            printf("\n---------------------------------\n");
+            printf("Nenhum compromisso encontrado.");
+            printf("\n---------------------------------\n");
+            printf("\nVoltando para o menu da agenda\n");
+            sleep(SLEEP_TIME);
             fclose(file);
             return;
         }
@@ -266,11 +272,10 @@ void ListaCompromissosPendentes()
                 pagina++;
             else if (acao == 2 && pagina > 0)
                 pagina--;
-
-            if (acao == 3)
+            else if (acao == 3)
             {
                 fclose(file);
-                ExcluirCompromisso();
+                ExcluiCompromisso();
             }
         } while (acao != 0 && acao != 3);
 
@@ -281,7 +286,7 @@ void ListaCompromissosPendentes()
 // endregion ListaCompromissos
 
 // Função para excluir um compromisso
-void ExcluirCompromisso()
+void ExcluiCompromisso()
 {
     int posicao;
     printf("Informe o id do compromisso que deseja excluir: ");
@@ -295,7 +300,7 @@ void ExcluirCompromisso()
     }
     else
     {
-        FILE *temp = fopen("temp.bin", "wb"); // Abre arquivo temporario para escrita
+        FILE *temp = fopen("temp.bin", "wb"); // Cria arquivo temporario para escrita
         if (temp == NULL)
         {
             perror("Erro ao abrir arquivo.");
@@ -341,7 +346,7 @@ void ExcluirCompromisso()
     }
 
     printf("\n---------------------------------\n");
-    printf("Compromisso excluido com sucesso!\n");
+    printf("Compromisso excluido com sucesso!");
     printf("\n---------------------------------\n");
     printf("\nVoltando para o menu\n");
     sleep(SLEEP_TIME);
