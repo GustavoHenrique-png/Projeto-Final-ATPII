@@ -3,17 +3,20 @@
 #include "agenda.h"
 #include "trataDados.h"
 
+//Declaração da função que chama o menu principal
 void ChamaMenuPrincipal();
 
 int main()
 {
+    // Chamada da função
     ChamaMenuPrincipal();
     return 0;
 }
 
+// Função que cria e exibe o menu
 void ChamaMenuPrincipal()
 {
-    int acao;
+    int acao;// Variavel para navegação do menu
 
     do
     {
@@ -22,7 +25,7 @@ void ChamaMenuPrincipal()
 
         // Gera menu
         printf("\n---------------------------------\nAcademico: %s\n---------------------------------\n", "Aluno");
-        printf("1 - Cadastrar Disciplina\n2 - Grade\n3 - Historico Escolar\n4 - Agenda\n5 - Atividades Pendentes\n0 - Sair\n---------------------------------\n");
+        printf("1 - Acessar grade curricular\n2 - Acessar agenda do aluno\n0 - Sair\n---------------------------------\n");
         printf("Informe a acao desejada: ");
         scanf("%d", &acao);
 
@@ -33,23 +36,14 @@ void ChamaMenuPrincipal()
         switch (acao)
         {
         case 1:
-            printf("Cadastrar Disciplina\n");
+            acessaGrade(); // Chama a função da grade curricular
             break;
         case 2:
-            acessaGrade();
-            break;
-        case 3:
-            printf("Historico Escolar\n");
-            break;
-        case 4:
-            AcessaAgenda();
-            break;
-        case 5:
-            ListaCompromissosPendentes();
+            AcessaAgenda(); // Chama a função da agenda do aluno
             break;
         default:
             break;
         }
 
-    } while (acao != 0);
+    } while (acao != 0); //Condição de parada do loop
 }

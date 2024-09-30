@@ -4,9 +4,10 @@
 #include <unistd.h>
 #include "data.h"
 
-#define MAX_PAGINA 5
-#define SLEEP_TIME 2
+#define MAX_PAGINA 5 // Definindo máximo de itens por página
+#define SLEEP_TIME 2 // Definindo timer para espera 
 
+// Declaração das funções do sistema
 void MenuAgenda();
 void AdicionaCompromisso();
 void InsereCompromissoNoArquivo();
@@ -45,7 +46,7 @@ void MenuAgenda()
     {
         system("cls");
         printf("\n---------------------------------\nAgenda\n---------------------------------\n");
-        printf("1 - Adicionar Compromisso\n2 - Listar Compromissos\n0 - Voltar\n---------------------------------\n");
+        printf("1 - Adicionar Compromisso\n2 - Listar Compromissos\n3 - Lista Compromisso pendentes\n4 - Excluir Compromisso\n0 - Voltar\n---------------------------------\n");
         printf("Informe a acao desejada: ");
         scanf("%d", &acao);
 
@@ -57,6 +58,10 @@ void MenuAgenda()
         case 2:
             ListaCompromissos();
             break;
+        case 3:
+            ListaCompromissosPendentes();
+        case 4:
+            ExcluiCompromisso();
         default:
             break;
         }
