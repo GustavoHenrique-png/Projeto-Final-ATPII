@@ -66,7 +66,7 @@ void menuGrade() {
     do {
         system("cls");  // Limpa a tela com "cls"
         printf("\n---------------------------------\nGrade\n---------------------------------\n");
-        printf("1 - Lista Disciplina\n2 - Cadastra Disciplina\n3 - Excluir Disciplina\n4 - Lista Disciplina Cadastrada\n0 - Fechar\n---------------------------------\n");
+        printf("1 - Lista Disciplina\n2 - Cadastra Disciplina\n3 - Excluir Disciplina\n4 - Lista Disciplina Cadastrada\n0 - Voltar\n---------------------------------\n");
         printf("Informe a acao desejada: ");
         scanf("%d", &acao);
 
