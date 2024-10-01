@@ -48,7 +48,7 @@ typedef struct
 // Struct que representa a disciplina
 typedef struct
 {
-    char codigo[10];
+    char codigo[11];
     char titulo[100];
     int semestre;
     int cargaHoraria;
@@ -284,7 +284,7 @@ void excluiDisciplina()
         return;
     }
 
-    char codigo[10]; // Armazena o código da disciplina a ser excluida
+    char codigo[11]; // Armazena o código da disciplina a ser excluida
     printf("Digite o codigo da disciplina que deseja excluir:\n");
     scanf("%s", codigo);
 
