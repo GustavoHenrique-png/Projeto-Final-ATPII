@@ -5,7 +5,7 @@
 #include "data.h"
 
 #define MAX_PAGINA 5 // Definindo máximo de itens por página
-#define SLEEP_TIME 2 // Definindo timer para espera 
+#define SLEEP_TIME 2 // Definindo timer para espera
 
 // Declaração das funções do sistema
 void MenuAgenda();
@@ -60,8 +60,10 @@ void MenuAgenda()
             break;
         case 3:
             ListaCompromissosPendentes();
+            break;
         case 4:
             ExcluiCompromisso();
+            break;
         default:
             break;
         }
