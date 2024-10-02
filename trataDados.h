@@ -140,7 +140,7 @@ void leArquivos()
         // Se houver mais disciplinas, mudar a pagina
         if ((pagina + 1) * DISCIPLINAS_POR_PAGINA < disciplinasLidas)
         {
-            printf("Deseja ir para a proxima pagina? (1 - Sim, 0 - Não): ");
+            printf("Deseja ir para a proxima pagina? (1 - Sim, 0 - Nao): ");
             scanf("%d", &continuar);
         }
         else
@@ -176,7 +176,7 @@ void cadastraDisciplina()
     printf("Carga horaria da disciplina:\n");
     scanf("%d", &novaDisciplina.cargaHoraria);
 
-    printf("Necessita de pre-requisitos?\n1 - Sim\n2 - Não\n");
+    printf("Necessita de pre-requisitos?\n1 - Sim\n2 - Nao\n");
     scanf("%d", &escolha);
 
     if (escolha == 1)
@@ -250,7 +250,7 @@ void listaDisciplinaCadastrada()
 
         if ((pagina + 1) * DISCIPLINAS_POR_PAGINA < disciplinasLidas)
         {
-            printf("Deseja ir para a próxima pagina? (1 - Sim, 0 - Não): ");
+            printf("Deseja ir para a próxima pagina? (1 - Sim, 0 - Nao): ");
             scanf("%d", &continuar);
         }
         else
