@@ -3,7 +3,7 @@
 #include "agenda.h"
 #include "trataDados.h"
 
-//Declaração da função que chama o menu principal
+// Declaração da função que chama o menu principal
 void ChamaMenuPrincipal();
 
 int main()

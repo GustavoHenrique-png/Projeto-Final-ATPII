@@ -169,9 +169,15 @@ void cadastraDisciplina()
 
     // Dados da disciplina a ser cadastrada
     printf("Codigo da disciplina:\n");
-    scanf("%s", novaDisciplina.codigo);
+    scanf("%s", novaDisciplina.codigo); 
     printf("Titulo da disciplina:\n");
-    scanf("%s", novaDisciplina.titulo);
+    getchar();
+    fgets(novaDisciplina.titulo, sizeof(novaDisciplina.titulo), stdin);
+    size_t len = strlen(novaDisciplina.titulo);
+    if (len > 0 && novaDisciplina.titulo[len - 1] == '\n') {
+        novaDisciplina.titulo[len - 1] = '\0';
+    }
+
     printf("Semestre da disciplina:\n");
     scanf("%d", &novaDisciplina.semestre);
     printf("Carga horaria da disciplina:\n");
@@ -182,7 +188,7 @@ void cadastraDisciplina()
 
     if (escolha == 1)
     { // Se tiver pre-requisitos informar os códigos
-        printf("Digite o número de pre-requisitos necessarios:\n");
+        printf("Digite o numero de pre-requisitos necessarios:\n");
         scanf("%d", &novaDisciplina.numPrerequisitos);
 
         for (int j = 0; j < novaDisciplina.numPrerequisitos; j++)
