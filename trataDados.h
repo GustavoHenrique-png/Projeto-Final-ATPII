@@ -7,7 +7,7 @@
 #include <windows.h>
 
 #define MAX_PREREQUISITOS 10     // Definimos o número máximo de pre-requisitos
-#define MAX_DISCIPLINAS 21       // Definimos o número máximo de disciplinas
+#define MAX_DISCIPLINAS 60       // Definimos o número máximo de disciplinas
 #define DISCIPLINAS_POR_PAGINA 5 // Definimos o número de disciplinas por página
 
 // Declaração das funções do sistema
@@ -146,6 +146,7 @@ void leArquivos()
         else
         {
             printf("Voce chegou ao final da lista.\n");
+            Sleep(5000);
             continuar = 0;
         }
 
@@ -256,6 +257,7 @@ void listaDisciplinaCadastrada()
         else
         {
             printf("Voce chegou ao final da lista.\n");
+            Sleep(5000);
             continuar = 0;
         }
 

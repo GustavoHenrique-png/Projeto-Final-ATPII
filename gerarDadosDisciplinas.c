@@ -48,7 +48,7 @@ void adicionaDisciplinas()
         {"DPAAIN.398", "Etica, Tecnologia e Sociedade", 27, 2, {}, 0, Obrigatoria, NaoCursada},
         {"DPAAIN.399", "Calculo I", 54, 2, {"DPAAIN.390"}, 1, Obrigatoria, NaoCursada},
         {"DPAAIN.400", "Extensao Curricular I", 54, 2, {}, 0, Obrigatoria, NaoCursada},
-        {"DPAAIN.401", "Algoritmos e Tecnicas de Programação II", 54, 3, {"DPAAIN.395"}, 1, Obrigatoria, NaoCursada},
+        {"DPAAIN.401", "Algoritmos e Tecnicas de Programacao II", 54, 3, {"DPAAIN.395"}, 1, Obrigatoria, NaoCursada},
         {"DPAAIN.402", "Sistemas Operacionais", 54, 3, {}, 0, Obrigatoria, NaoCursada},
         {"DPAAIN.403", "Algebra Linear", 54, 3, {"DPAAIN.390"}, 1, Obrigatoria, NaoCursada},
         {"DPAAIN.404", "Banco de Dados I", 54, 3, {}, 0, Obrigatoria, NaoCursada},
@@ -122,6 +122,8 @@ void imprimeDisciplinas()
         printf("Erro ao abrir o arquivo para leitura.\n");
         return;
     }
+
+    printf("\n---------------------------------\n");
 
     Disciplina disciplina;
 
