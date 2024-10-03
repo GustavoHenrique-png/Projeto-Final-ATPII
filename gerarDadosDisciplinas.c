@@ -32,8 +32,11 @@ typedef struct
 void adicionaDisciplinas()
 {
     int numDisciplinas;
-    printf("Informe o numero de disciplinas (0 para todas): ");
-    scanf("%d", &numDisciplinas);
+    do
+    {
+        printf("Informe o numero de disciplinas que serao escritas em disciplinas.bin (1-60): ");
+        scanf("%d", &numDisciplinas);
+    } while (numDisciplinas == 0 || numDisciplinas > 60);
 
     Disciplina disciplinas[] = {
         {"DPAAIN.389", "Introducao a Engenharia de Software", 54, 1, {}, 0, Obrigatoria, NaoCursada},
@@ -106,8 +109,7 @@ void adicionaDisciplinas()
     }
 
     // Escreve todas as disciplinas no arquivo binário
-    int numDisciplinasMostrar = numDisciplinas == 0 ? sizeof(disciplinas) / sizeof(disciplinas[0]) : numDisciplinas;
-    fwrite(disciplinas, sizeof(Disciplina), numDisciplinasMostrar, arquivo);
+    fwrite(disciplinas, sizeof(Disciplina), numDisciplinas, arquivo);
 
     fclose(arquivo);
     printf("Disciplinas salvas com sucesso em disciplinas.bin\n");
