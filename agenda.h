@@ -61,9 +61,6 @@ void MenuAgenda()
         case 3:
             ListaCompromissosPendentes();
             break;
-        case 4:
-            ExcluiCompromisso();
-            break;
         default:
             break;
         }
@@ -83,6 +80,8 @@ void AdicionaCompromisso()
     printf("Informe a data do compromisso (formato dd-mm-AAAA): ");
     scanf(" %[^\n]", data); // Lê a data do compromisso
 
+    compromisso.data = ConverteStringToData(data);
+
     // Garante que a data informada é válida
     while (compromisso.data.dia == 0 && compromisso.data.mes == 0 && compromisso.data.ano == 0)
     {
@@ -93,8 +92,6 @@ void AdicionaCompromisso()
 
     printf("Informe o status do compromisso (0 - Pendente, 1 - Concluido): ");
     scanf("%d", &compromisso.status); // Lê o status do compromisso
-
-    compromisso.data = ConverteStringToData(data); // Converte a string para data
 
     InsereCompromissoNoArquivo(compromisso); // Insere o compromisso no arquivo
 
